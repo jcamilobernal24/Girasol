@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un girasol para ti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Nunito:wght@400;600;700&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: una sola pantalla de atardecer en el mar; el girasol al centro, cada pétalo es un mensaje. */
+:root{
+  --sky-top:#ffe9d6;
+  --sky-low:#ffd3c2;
+  --sea:#5fb3c4;
+  --sea-deep:#2f7f96;
+  --petal:#f7c325;
+  --petal-open:#ffdb4d;
+  --petal-edge:#d99a0b;
+  --seed:#6b3f1d;
+  --seed-dot:#8d5a2b;
+  --bow:#e8505b;
+  --ink:#3b2a2f;
+  --paper:#fffaf2;
+  --muted:#7a6268;
+  --display:"Young Serif", Georgia, serif;
+  --body:"Nunito", system-ui, sans-serif;
+  --hand:"Caveat", "Comic Sans MS", cursive;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-low) 55%,var(--sea) 100%);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  overflow-x:hidden;
+}
+.wrap{
+  position:relative; z-index:2;
+  max-width:560px; margin:0 auto;
+  padding:28px 16px 150px;
+  display:flex; flex-direction:column; align-items:center; gap:18px;
+  text-align:center;
+}
+.eyebrow{
+  font-family:var(--hand); font-size:1.6rem; color:var(--bow); margin:0;
+}
+h1{
+  font-family:var(--display); font-weight:400;
+  font-size:clamp(1.9rem,7vw,2.6rem); line-height:1.1;
+  margin:0; text-wrap:balance;
+}
+.lead{margin:0; color:var(--muted); max-width:34ch; line-height:1.5}
+
+/* Sol de fondo */
+.sun{
+  position:fixed; z-index:0; left:50%; bottom:110px;
+  width:340px; height:340px; transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,#fff4c9 0%,#ffe08a 45%,rgba(255,200,120,0) 70%);
+  opacity:.7; pointer-events:none;
+}
+
+/* Girasol */
+.flower{
+  --r:96px;
+  position:relative; width:300px; height:300px; max-width:100%;
+  margin-top:6px;
+}
+.stem{
+  position:absolute; left:50%; top:52%; width:10px; height:200px;
+  background:linear-gradient(90deg,#4f8a3b,#6aa84f); border-radius:6px;
+  transform:translateX(-50%); z-index:0;
+}
+.leaf{
+  position:absolute; top:78%; width:70px; height:34px; background:#6aa84f;
+  border-radius:0 100% 0 100%; z-index:0;
+}
+.leaf.l{left:calc(50% - 72px); transform:rotate(-18deg)}
+.leaf.r{left:calc(50% + 4px); transform:scaleX(-1) rotate(-18deg)}
+.petal, .petal-back{
+  position:absolute; left:50%; top:50%;
+  width:46px; height:96px; margin:-48px 0 0 -23px;
+  border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+  transform-origin:50% 50%;
+}
+.petal-back{
+  background:var(--petal-edge); opacity:.85; z-index:1;
+  transform:rotate(var(--a)) translateY(calc(var(--r) * -1 + 6px)) scale(.9);
+}
+.petal{
+  z-index:2; border:0; cursor:pointer; padding:0;
+  background:linear-gradient(180deg,var(--petal-open),var(--petal));
+  box-shadow:inset 0 -6px 0 rgba(217,154,11,.35);
+  transform:rotate(var(--a)) translateY(calc(var(--r) * -1));
+  transition:transform .35s cubic-bezier(.3,1.6,.5,1), filter .3s, box-shadow .3s;
+  animation:bloom .9s cubic-bezier(.3,1.4,.5,1) both;
+  animation-delay:calc(var(--i) * 70ms);
+}
+.petal:hover,.petal:focus-visible{
+  transform:rotate(var(--a)) translateY(calc(var(--r) * -1 - 8px));
+  outline:none;
+}
+.petal:focus-visible{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--bow)}
+.petal.read{
+  background:linear-gradient(180deg,#fff2a8,var(--petal-open));
+  box-shadow:inset 0 -6px 0 rgba(217,154,11,.2),0 0 18px rgba(255,220,90,.9);
+}
+@keyframes bloom{
+  from{transform:rotate(var(--a)) translateY(0) scale(.2); opacity:0}
+  to{transform:rotate(var(--a)) translateY(calc(var(--r) * -1)) scale(1); opacity:1}
+}
+.center{
+  position:absolute; left:50%; top:50%; z-index:3;
+  width:104px; height:104px; margin:-52px 0 0 -52px; border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 30%,var(--seed-dot) 0 2px,transparent 3px) 0 0/12px 12px,
+    radial-gradient(circle,#8a5427 0%,var(--seed) 70%);
+  box-shadow:inset 0 0 0 5px #4f2c12, 0 4px 10px rgba(80,40,10,.3);
+  display:grid; place-items:center;
+  color:#ffe8b0; font-family:var(--hand); font-size:1.5rem; line-height:1;
+}
+.center small{display:block; font-family:var(--body); font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; opacity:.85}
+.bow{
+  position:absolute; z-index:4; left:calc(50% + 34px); top:calc(50% - 64px);
+  width:44px; height:28px;
+}
+
+/* Tarjeta de mensaje */
+.note{
+  position:relative; width:100%; max-width:440px; min-height:150px;
+  background:var(--paper); border-radius:6px;
+  padding:26px 22px 20px;
+  box-shadow:0 12px 30px rgba(59,42,47,.15);
+  transform:rotate(-1deg);
+  display:flex; flex-direction:column; justify-content:center; gap:8px;
+}
+.note::before{
+  content:""; position:absolute; top:-10px; left:50%; width:90px; height:22px;
+  transform:translateX(-50%) rotate(2deg);
+  background:rgba(232,80,91,.35);
+}
+.note p{
+  margin:0; font-family:var(--hand); font-size:1.65rem; line-height:1.25; color:var(--ink);
+  text-wrap:pretty;
+}
+.note .meta{font-family:var(--body); font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+.note.pop{animation:pop .45s ease}
+@keyframes pop{0%{transform:rotate(-1deg) scale(.96); opacity:.4}100%{transform:rotate(-1deg) scale(1); opacity:1}}
+
+.final{
+  width:100%; max-width:440px;
+  font-family:var(--display); font-size:1.15rem; line-height:1.5;
+  background:rgba(255,250,242,.82); border-radius:6px; padding:18px 20px;
+}
+.final .sign{display:block; margin-top:8px; font-family:var(--hand); font-size:1.7rem; color:var(--bow)}
+
+/* Mar */
+.sea{position:fixed; left:0; right:0; bottom:0; height:140px; z-index:1; pointer-events:none; overflow:hidden}
+.wave{position:absolute; left:0; bottom:0; width:200%; height:100%; animation:drift linear infinite}
+.wave.w1{animation-duration:14s; opacity:.55}
+.wave.w2{animation-duration:9s; animation-direction:reverse; bottom:-12px; opacity:.8}
+.wave.w3{animation-duration:6s; bottom:-30px}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.sparkle{position:fixed; z-index:5; pointer-events:none; font-size:18px; color:var(--petal-edge); animation:rise 1.2s ease-out forwards}
+@keyframes rise{from{opacity:1; transform:translateY(0) scale(1)}to{opacity:0; transform:translateY(-70px) scale(.6)}}
+
+@media (max-width:380px){ .flower{--r:84px; width:260px; height:260px} .petal,.petal-back{width:40px; height:84px; margin:-42px 0 0 -20px} }
+@media (prefers-reduced-motion:reduce){ .wave,.petal,.note.pop{animation:none!important} .sparkle{display:none} }
+</style>
+</head><body>
+
+<div class="sun" aria-hidden="true"></div>
+
+<main class="wrap">
+  <p class="eyebrow">para ti, con cariño</p>
+  <h1>Un girasol por todo tu esfuerzo</h1>
+  <p class="lead">Toca cada pétalo. Cada uno guarda algo que quería decirte.</p>
+
+  <div class="flower" id="flower">
+    <div class="stem"></div>
+    <div class="leaf l"></div><div class="leaf r"></div>
+    <div class="center" id="count" aria-live="polite"><span>0/8<small>pétalos</small></span></div>
+    <svg class="bow" viewBox="0 0 44 28" aria-hidden="true">
+      <path d="M22 14 C14 2 2 2 3 14 C2 26 14 26 22 14 Z" fill="var(--bow)"/>
+      <path d="M22 14 C30 2 42 2 41 14 C42 26 30 26 22 14 Z" fill="var(--bow)"/>
+      <circle cx="22" cy="14" r="5" fill="#c93a47"/>
+    </svg>
+  </div>
+
+  <div class="note" id="note" aria-live="polite">
+    <span class="meta" id="meta">esperando tu toque</span>
+    <p id="msg">Empieza por el pétalo que quieras ☀</p>
+  </div>
+
+  <div class="final" id="final" hidden>
+    Eso es todo por ahora. Sigue así con tus trabajos, que lo estás haciendo increíble. Y si necesitas despejarte un rato, aquí estoy.
+    <span class="sign">— Juan</span>
+  </div>
+</main>
+
+<div class="sea" aria-hidden="true">
+  <svg class="wave w1" viewBox="0 0 1200 140" preserveAspectRatio="none"><path fill="var(--sea)" d="M0 60 Q75 30 150 60 T300 60 T450 60 T600 60 T750 60 T900 60 T1050 60 T1200 60 V140 H0Z"/></svg>
+  <svg class="wave w2" viewBox="0 0 1200 140" preserveAspectRatio="none"><path fill="var(--sea)" d="M0 70 Q100 40 200 70 T400 70 T600 70 T800 70 T1000 70 T1200 70 V140 H0Z"/></svg>
+  <svg class="wave w3" viewBox="0 0 1200 140" preserveAspectRatio="none"><path fill="var(--sea-deep)" d="M0 80 Q60 60 120 80 T240 80 T360 80 T480 80 T600 80 T720 80 T840 80 T960 80 T1080 80 T1200 80 V140 H0Z"/></svg>
+</div>
+
+<script>
+const messages = [
+  "Cada trabajo que haces tiene algo tuyo: ese ojo para el color y los detalles que no cualquiera ve.",
+  "Sé que estos días han sido pesados. Descansar también es parte del proceso, así que no te sientas culpable por hacer pausas.",
+  "Si un diseño no sale a la primera, no pasa nada. Los mejores casi siempre llegan después de varios bocetos.",
+  "Me alegra mucho volver a hablar contigo. Nuestras conversaciones me mejoran el día.",
+  "Toma agüita, come algo rico y estírate un poquito. Son órdenes del comité de apoyo.",
+  "Estoy muy orgulloso de lo mucho que te esfuerzas, aunque a veces tú no lo notes.",
+  "Como las olas: a veces suben y a veces bajan, pero siempre vuelven. Tú también vas a poder con todo esto.",
+  "Eres una persona muy especial para mí. Gracias por estar."
+];
+const flower = document.getElementById('flower');
+const msg = document.getElementById('msg');
+const meta = document.getElementById('meta');
+const note = document.getElementById('note');
+const count = document.getElementById('count');
+const finalBox = document.getElementById('final');
+const read = new Set();
+
+for (let i = 0; i < 16; i++) {
+  const b = document.createElement('div');
+  b.className = 'petal-back';
+  b.style.setProperty('--a', (i * 22.5 + 11.25) + 'deg');
+  flower.appendChild(b);
+}
+messages.forEach((_, i) => {
+  const p = document.createElement('button');
+  p.className = 'petal';
+  p.type = 'button';
+  p.id = 'petal-' + i;
+  p.style.setProperty('--a', (i * 45) + 'deg');
+  p.style.setProperty('--i', i);
+  p.setAttribute('aria-label', 'Abrir pétalo ' + (i + 1));
+  p.addEventListener('click', e => open(i, p, e));
+  flower.appendChild(p);
+});
+
+function open(i, el, e) {
+  read.add(i);
+  el.classList.add('read');
+  msg.textContent = messages[i];
+  meta.textContent = 'pétalo ' + (i + 1) + ' de 8';
+  note.classList.remove('pop'); void note.offsetWidth; note.classList.add('pop');
+  count.innerHTML = '<span>' + read.size + '/8<small>pétalos</small></span>';
+  burst(e.clientX || window.innerWidth / 2, e.clientY || 200);
+  if (read.size === messages.length) {
+    finalBox.hidden = false;
+    count.innerHTML = '<span>✿<small>completo</small></span>';
+  }
+}
+function burst(x, y) {
+  for (let k = 0; k < 5; k++) {
+    const s = document.createElement('span');
+    s.className = 'sparkle';
+    s.textContent = k % 2 ? '✦' : '✿';
+    s.style.left = (x + (Math.random() * 60 - 30)) + 'px';
+    s.style.top = (y + (Math.random() * 20 - 10)) + 'px';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1300);
+  }
+}
+</script>
+</body></html>
